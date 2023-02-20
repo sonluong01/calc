@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CALC</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    .form-control:focus {
+      box-shadow: 0 0 0 0;
+      border-color: rgb(247, 166, 0);
+    }
+    .dropdown-item.active {
+      background-color: rgb(247, 166, 0);
+    }
+    .navbar-nav .nav-link.active, .navbar-nav .show > .nav-link {
+      color: rgb(247, 166, 0);
+    }
+    tbody .table-secondary {
+      
+    }
+    tbody .table-success {
+      
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="container" style="max-width: 680px;">
+    <nav class="navbar navbar-expand bg-body-tertiary container sticky-top">
+      <div class="container">
+        <!-- <a class="navbar-brand" href="#">Caculator</a> -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" :class="{ active : state == 'crypto' }" @click="changeState('crypto')" href="#">Crypto</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" :class="{ active : state == 'currency' }" @click="changeState('currency')" href="#">Currency</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" :class="{ active : state == 'gold' }" @click="changeState('gold')" href="#">Gold</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" :class="{ active : state == 'level' }" @click="changeState('level')" href="#">Level</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container card mt-3 text-secondary-emphasis">
+      <form class="container card-body row">
+        <div class="container col-12 col-sm-6">
+          <div class="mb-3 row justify-content-center">
+            <label for="balance" class="col col-form-label">Balance</label>
+            <div class="col">
+              <input type="text" disabled class="form-control" id="balance" v-model="balance">
+            </div>
+          </div>
+          <div class="mb-3 row justify-content-center">
+            <label for="risk" class="col col-form-label">Risk</label>
+            <div class="col">
+              <input type="text" disabled class="form-control" id="risk" v-model="risk">
+            </div>
+          </div>
+          <div class="mb-3 row justify-content-center">
+            <label for="entry" class="col col-form-label">Entry Price</label>
+            <div class="col">
+              <input type="text" class="form-control" id="entry" v-model="entry">
+            </div>
+          </div>
+          <div class="mb-3 row justify-content-center">
+            <label for="close" class="col col-form-label">Close Price</label>
+            <div class="col">
+              <input type="text" class="form-control" id="close" v-model="close">
+            </div>
+          </div>
+        </div>
+        <div class="container col-12 col-sm-6 border">
+          <div class="mb-3 row justify-content-center">
+            <label for="leverage" class="col col-form-label">Leverage</label>
+            <div class="col">
+              <input type="text" style="color: rgb(247, 166, 0)" disabled class="form-control-plaintext" id="leverage" :value="leverage">
+            </div>
+          </div>
+          <div class="mb-3 row justify-content-center">
+            <label for="qty" class="col col-form-label">Qty</label>
+            <div class="col">
+              <input type="text" style="color: rgb(247, 166, 0)" disabled class="form-control-plaintext" id="qty" :value="qty">
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="container card mt-3 text-secondary-emphasis">
+      <div class="container card-body row">
+        <table class="table table-dark table-bordered">
+          <thead>
+            <tr class="bg-body-tertiary" style="color: rgb(247, 166, 0);">
+              <th scope="col">Rank</th>
+              <th scope="col">Level</th>
+              <th scope="col">Balance</th>
+              <th scope="col">Mark</th>
+            </tr>
+          </thead>
+          <tbody v-for="l in level" :key="l.id" class="table-group-divider">
+            <tr v-if="l.rank == 'Start'" class="table-secondary">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+            <tr v-if="l.rank == 'Silver'" class="table-success">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+            <tr v-if="l.rank == 'Gold'" class="table-danger">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+            <tr v-if="l.rank == 'Platinum'" class="table-warning">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+            <tr v-if="l.rank == 'Diamond'" class="table-info">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+            <tr v-if="l.rank == 'Master'" class="table-light">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+            <tr v-if="l.rank == 'Conqueror'" class="table-dark">
+              <th scope="row">{{ l.rank }}</th>
+              <td>{{ l.level }}</td>
+              <td>{{ l.balance }}</td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    const { createApp } = Vue
+
+    createApp({
+      data() {
+        return {
+          balance: 175,
+          ratio: 5,
+          entry: 0.4028,
+          close: 0.3967,
+          state: 'crypto',
+          initBalance: 5,
+          multi: 1.5,
+          levels: []
+        }
+      },
+      computed: {
+        risk() {
+          return Math.floor(this.balance * this.ratio / 100 * 100) / 100
+        },
+        qty() {
+          if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
+            return '--'
+          }
+          return Math.floor(Math.abs(this.risk / (this.close - this.entry)) * 1000000) / 1000000
+        },
+        leverage() {
+          if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
+            return '--'
+          }
+          return Math.floor(Math.abs(this.entry / (this.close - this.entry)) * 1000000) / 1000000
+        },
+        level() {
+          if (this.levels.length) {
+            return this.levels
+          }
+          let silver = 7
+          let gold = 7
+          let platinum = 7
+          let diamond = 6
+          let master = 5
+          let conqueror = 5
+          this.levels.push({'id': 0, 'rank': 'Start', 'level': 0, 'balance': this.initBalance})
+          this.levels.push({'id': 1, 'rank': 'Silver', 'level': 1, 'balance': this.initBalance + this.multi})
+          let init = 1
+          for (let i = 2; i <= silver; i++) {
+            let v = this.levels[init]['balance'] + (this.levels[init]['balance'] - this.levels[init-1]['balance']) * this.multi
+            this.levels.push({'id': init, 'rank': 'Silver', 'level': i, 'balance': v})
+            init++
+          }
+          for (let i = 1; i <= gold; i++) {
+            let v = this.levels[init]['balance'] + (this.levels[init]['balance'] - this.levels[init-1]['balance']) * this.multi
+            this.levels.push({'id': init, 'rank': 'Gold', 'level': i, 'balance': v})
+            init++
+          }
+          for (let i = 1; i <= platinum; i++) {
+            let v = this.levels[init]['balance'] + (this.levels[init]['balance'] - this.levels[init-1]['balance']) * this.multi
+            this.levels.push({'id': init, 'rank': 'Platinum', 'level': i, 'balance': v})
+            init++
+          }
+          for (let i = 1; i <= diamond; i++) {
+            let v = this.levels[init]['balance'] + (this.levels[init]['balance'] - this.levels[init-1]['balance']) * this.multi
+            this.levels.push({'id': init, 'rank': 'Diamond', 'level': i, 'balance': v})
+            init++
+          }
+          for (let i = 1; i <= master; i++) {
+            let v = this.levels[init]['balance'] + (this.levels[init]['balance'] - this.levels[init-1]['balance']) * this.multi
+            this.levels.push({'id': init, 'rank': 'Master', 'level': i, 'balance': v})
+            init++
+          }
+          for (let i = 1; i <= conqueror; i++) {
+            let v = this.levels[init]['balance'] + (this.levels[init]['balance'] - this.levels[init-1]['balance']) * this.multi
+            this.levels.push({'id': init, 'rank': 'Conqueror', 'level': i, 'balance': v})
+            init++
+          }
+          for (let i = 0; i < this.levels.length; i++) {
+            let v = Math.round(this.levels[i]['balance'] * 100) / 100
+            this.levels[i]['balance'] = v
+          }
+          return this.levels
+        }
+      },
+      methods: {
+        changeState(state) {
+          this.state = state
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>
