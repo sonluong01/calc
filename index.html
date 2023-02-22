@@ -129,6 +129,8 @@
           balance: 175,
           state: 'crypto',
           initBalance: 5,
+          entry: '',
+          close: '',
         }
       },
       computed: {
@@ -142,100 +144,27 @@
           localStorage.setItem("multi", r)
           return parseFloat(r)
         },
-        entry: {
-          get() {
-            return parseFloat(localStorage.getItem("entry") || "")
-          },
-          set(e) {
-            localStorage.setItem("entry", e)
-          }
-        },
-        close: {
-          get() {
-            return parseFloat(localStorage.getItem("close") || "")
-          },
-          set(e) {
-            localStorage.setItem("close", e)
-          }
-        },
         risk() {
           return Math.floor(this.balance * this.ratio / 100 * 100) / 100
         },
         qty() {
+          // if (isNaN(this.e) || isNaN(this.c)) {
+          //   return '--'
+          // }
           if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
             return '--'
           }
           return Math.floor(Math.abs(this.risk / (this.close - this.entry)) * 1000000) / 1000000
         },
         leverage() {
+          // if (isNaN(this.entry) || isNaN(this.close)) {
+          //   return '--'
+          // }
           if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
             return '--'
           }
           return Math.floor(Math.abs(this.entry / (this.close - this.entry)) * 1000000) / 1000000
         },
-        start() {
-          return {'id': 0, 'level': 0, 'balance': this.initBalance}
-        },
-        silver() {
-          let s = 7
-          let l = []
-          let init = 2
-          l.push({'id': 1, 'level': 1, 'balance': this.initBalance + this.multi})
-          l.push({'id': 2, 'level': 2, 'balance': this.initBalance + this.multi + this.multi * this.multi})
-          for (let i = 3; i <= s; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Silver', 'level': i, 'balance': v})
-            init++
-          }
-        },
-        level() {
-          let l = []
-          let silver = 7
-          let gold = 7
-          let platinum = 7
-          let diamond = 6
-          let master = 5
-          let conqueror = 5
-          l.push({'id': 0, 'rank': 'Start', 'level': 0, 'balance': this.initBalance})
-          l.push({'id': 1, 'rank': 'Silver', 'level': 1, 'balance': this.initBalance + this.multi})
-          let init = 1
-          for (let i = 2; i <= silver; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Silver', 'level': i, 'balance': v})
-            init++
-          }
-          for (let i = 1; i <= gold; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Gold', 'level': i, 'balance': v})
-            init++
-          }
-          for (let i = 1; i <= platinum; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Platinum', 'level': i, 'balance': v})
-            init++
-          }
-          for (let i = 1; i <= diamond; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Diamond', 'level': i, 'balance': v})
-            init++
-          }
-          for (let i = 1; i <= master; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Master', 'level': i, 'balance': v})
-            init++
-          }
-          for (let i = 1; i <= conqueror; i++) {
-            let v = l[init]['balance'] + (l[init]['balance'] - l[init-1]['balance']) * this.multi
-            l.push({'id': init, 'rank': 'Conqueror', 'level': i, 'balance': v})
-            init++
-          }
-          for (let i = 0; i < l.length; i++) {
-            let v = Math.round(l[i]['balance'] * 100) / 100
-            l[i]['balance'] = v
-          }
-          
-          return l
-        }
       },
       methods: {
         changeState(state) {
