@@ -36,6 +36,20 @@
     #conqueror a {
       color: #ec5aa2;
     }
+    .list-group-item.active {
+      border-color: var(--bs-list-group-border-color);
+      background-color: rgb(28, 25, 20);
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
   </style>
 </head>
 <body>
@@ -77,7 +91,7 @@
           <div class="mb-3 row justify-content-center">
             <label for="balance" class="col col-form-label">Balance</label>
             <div class="col">
-              <input type="text" disabled class="form-control" id="balance" v-model="balance">
+              <input type="text" readonly class="form-control" id="balance" v-model="balance" @click="viewRank">
             </div>
           </div>
           <div class="mb-3 row justify-content-center">
@@ -89,13 +103,13 @@
           <div class="mb-3 row justify-content-center">
             <label for="entry" class="col col-form-label">Entry Price</label>
             <div class="col">
-              <input type="text" class="form-control" id="entry" v-model="entry">
+              <input type="number" class="form-control" id="entry" v-model="entry">
             </div>
           </div>
           <div class="row justify-content-center">
             <label for="close" class="col col-form-label">Close Price</label>
             <div class="col">
-              <input type="text" class="form-control" id="close" v-model="close">
+              <input type="number" class="form-control" id="close" v-model="close">
             </div>
           </div>
         </div>
@@ -128,14 +142,14 @@
           </div>
           <div class="col border-start">
             <div class="row list-group list-group-flush border-end">
-              <a v-for="r in silver" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in silver" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.id }}
               </a>
             </div>
           </div>
           <div class="col">
             <div class="row list-group list-group-flush">
-              <a v-for="r in silver" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in silver" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.balance }}$
               </a>
             </div>
@@ -147,14 +161,14 @@
           </div>
           <div class="col border-start">
             <div class="row list-group list-group-flush border-end">
-              <a v-for="r in gold" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in gold" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.id }}
               </a>
             </div>
           </div>
           <div class="col">
             <div class="row list-group list-group-flush">
-              <a v-for="r in gold" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in gold" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.balance }}$
               </a>
             </div>
@@ -166,14 +180,14 @@
           </div>
           <div class="col border-start">
             <div class="row list-group list-group-flush border-end">
-              <a v-for="r in platinum" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in platinum" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.id }}
               </a>
             </div>
           </div>
           <div class="col">
             <div class="row list-group list-group-flush">
-              <a v-for="r in platinum" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in platinum" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.balance }}$
               </a>
             </div>
@@ -185,14 +199,14 @@
           </div>
           <div class="col border-start">
             <div class="row list-group list-group-flush border-end">
-              <a v-for="r in diamond" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in diamond" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.id }}
               </a>
             </div>
           </div>
           <div class="col">
             <div class="row list-group list-group-flush">
-              <a v-for="r in diamond" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in diamond" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.balance }}$
               </a>
             </div>
@@ -204,14 +218,14 @@
           </div>
           <div class="col border-start">
             <div class="row list-group list-group-flush border-end">
-              <a v-for="r in master" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in master" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.id }}
               </a>
             </div>
           </div>
           <div class="col">
             <div class="row list-group list-group-flush">
-              <a v-for="r in master" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in master" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.balance }}$
               </a>
             </div>
@@ -223,14 +237,14 @@
           </div>
           <div class="col border-start">
             <div class="row list-group list-group-flush border-end">
-              <a v-for="r in conqueror" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in conqueror" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.id }}
               </a>
             </div>
           </div>
           <div class="col">
             <div class="row list-group list-group-flush">
-              <a v-for="r in conqueror" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action">
+              <a v-for="r in conqueror" :key="r.id" @click="changeBalance(r.balance)" href="#" class="list-group-item list-group-item-action" :class="{active : r.balance == balance}">
                 {{ r.balance }}$
               </a>
             </div>
@@ -342,6 +356,29 @@
           }
           return r
         },
+        currentRank() {
+          if (this.balance <= 5) {
+            return 'start'
+          }
+          if (this.balance > 5 && this.balance < 70) {
+            return 'silver'
+          }
+          if (this.balance >= 70 && this.balance < 1000) {
+            return 'gold'
+          }
+          if (this.balance >= 1000 && this.balance < 20000) {
+            return 'platinum'
+          }
+          if (this.balance >= 20000 && this.balance < 200000) {
+            return 'diamond'
+          }
+          if (this.balance >= 20000 && this.balance < 1500000) {
+            return 'master'
+          }
+          if (this.balance > 1500000 && this.balance < 10000000) {
+            return 'conqueror'
+          }
+        },
       },
       methods: {
         changeState(state, rank) {
@@ -355,6 +392,10 @@
           localStorage.setItem("balance", balance)
           this._balance = balance
           this.state = 'crypto'
+        },
+        viewRank() {
+          this.state = 'rank'
+          this.rank = this.currentRank
         }
       }
     }).mount('#app')
