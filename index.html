@@ -120,10 +120,22 @@
               <input type="text" style="color: rgb(247, 166, 0)" disabled class="form-control-plaintext" id="leverage" :value="leverage">
             </div>
           </div>
-          <div class="row justify-content-center">
+          <div class="mb-3 row justify-content-center">
             <label for="qty" class="col col-form-label">Qty</label>
             <div class="col">
               <input type="text" style="color: rgb(247, 166, 0)" disabled class="form-control-plaintext" id="qty" :value="qty">
+            </div>
+          </div>
+          <div class="mb-3 row justify-content-center">
+            <label for="target1" class="col col-form-label">Target 1</label>
+            <div class="col">
+              <input type="text" style="color: rgb(247, 166, 0)" disabled class="form-control-plaintext" id="target1" :value="target1">
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <label for="target2" class="col col-form-label">Target 2</label>
+            <div class="col">
+              <input type="text" style="color: rgb(247, 166, 0)" disabled class="form-control-plaintext" id="target2" :value="target2">
             </div>
           </div>
         </div>
@@ -293,6 +305,18 @@
             return '--'
           }
           return Math.floor(Math.abs(this.risk / (this.close - this.entry)) * 1000000) / 1000000
+        },
+        target1() {
+          if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
+            return '--'
+          }
+          return Math.floor((this.entry + (this.entry - this.close)) * 1.0011 * 1000000) / 1000000
+        },
+        target2() {
+          if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
+            return '--'
+          }
+          return Math.floor((this.entry + (this.entry - this.close) * 2) * 1.0011 * 1000000) / 1000000
         },
         leverage() {
           if ((this.entry == this.close) || (this.entry == '' || this.close == '')) {
